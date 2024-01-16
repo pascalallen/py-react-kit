@@ -1,0 +1,9 @@
+services:
+  python-web-server:
+    build:
+      context: .
+    container_name: python-web-server
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app,rw
