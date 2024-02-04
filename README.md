@@ -7,7 +7,7 @@ py-react-kit is a fully containerized dev kit designed to get you up and running
 
 - Docker + Docker configuration
 - a Python server
-- an API built with Flask
+- an API built with Flask + GraphQL
 - a React client
 - TypeScript
 - Webpack
