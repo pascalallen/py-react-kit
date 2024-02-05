@@ -1,37 +1,21 @@
-from flask import Flask, render_template, request
-from graphene import ObjectType, String, Schema
+from flask import Flask
+from routes.user_routes import user_routes
+from routes.default_routes import default_routes
+from domain.base import db
+from dotenv import load_dotenv
+from os import getenv
 
-class Query(ObjectType):
-    hello = String(
-        name=String(default_value="World!")
-    )
-
-    def resolve_hello(self, info, name):
-        return 'Hello, ' + name
-
-helloSchema = Schema(query=Query)
+load_dotenv()
 
 app = Flask(__name__)
-
-@app.route('/hello/<name>')
-def hello_world(name):
-    hello_query = """
-        {
-            hello ( name : "%s" )
-        }
-    """%(name)
-
-    result = helloSchema.execute(hello_query)
-
-    return {
-        "data": result.data['hello']
-    }
-
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def default(path):
-    return render_template('index.html')
+app.config['DEBUG'] = True
+app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{getenv('DB_USER')}:{getenv('DB_PASSWORD')}@{getenv('DB_HOST')}:{getenv('DB_PORT')}/{getenv('DB_NAME')}"
+app.register_blueprint(user_routes)
+app.register_blueprint(default_routes)
+db.init_app(app)
+with app.app_context():
+    db.create_all()
 
 if __name__ == '__main__':
     # Run the app on host 0.0.0.0 to make it externally accessible
-    app.run(host='0.0.0.0', port=8080)
+    app.run(host='0.0.0.0', port=8080, debug=True)
