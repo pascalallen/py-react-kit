@@ -29,6 +29,12 @@ py-react-kit is a fully containerized dev kit designed to get you up and running
 cd <projects-parent-directory> && git clone https://github.com/pascalallen/py-react-kit.git
 ```
 
+### Copy & Modify `.env` File
+
+```bash
+cp .env.example .env
+```
+
 ### Bring Up Environment
 
 ```bash
